@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Word - Blockchain Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="walletSection">
+        <button id="connectButton">Connect Wallet</button>
+    </div>
+
+    <div id="actionSection" style="display:none;">
+        <button id="claimButton">Claim Initial Tokens</button>
+        <button id="startGameButton">Start Game</button>
+        <button id="resetGameButton">Reset Game</button>
+
+    </div>
+
+    <div id="gameSection" style="display:none;">
+        <h1>Guess The Word - Blockchain Theme</h1>
+        <div>
+            <p id="wordDisplay"></p>
+            <p id="remainingChances">Chances left: 5</p>
+            <input type="text" id="guessInput" maxlength="1" placeholder="Enter a letter">
+            <button id="guessButton">Guess</button>
+            <button id="Submit_Button">Submit</button>
+
+            <p id="status"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
