@@ -5,11 +5,24 @@ let account;
 let memeToken;
 
 
-const gameContractAddress = '0x270E8178eFeB318Da8cb6c93401112DAc4d3682f'; // Your game contract address
-const memeTokenAddress = '0x4E65Af7072f0427953384563f8B05fc94F2283A4'; // Your meme token address
+const gameContractAddress = '0x5a675C802Ec61bC25EA74FB82b453833CB86801d'; // Your game contract address
+const memeTokenAddress = '0x87F59f6AABeAf3585B5ae4f8f16080cb8cCbcA3b'; // Your meme token address
 
 // ABIs
 const gameContractABI =[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "player",
+				"type": "address"
+			}
+		],
+		"name": "endGame",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"inputs": [
 			{
@@ -60,29 +73,16 @@ const gameContractABI =[
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "ENTRY_FEE",
-		"outputs": [
+		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "letter",
+				"type": "string"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "REWARD",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
+		"name": "guessLetter",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -93,9 +93,35 @@ const gameContractABI =[
 				"type": "address"
 			}
 		],
-		"name": "endGame",
+		"name": "resetGame",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "word",
+				"type": "string"
+			}
+		],
+		"name": "startGame",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ENTRY_FEE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -147,19 +173,6 @@ const gameContractABI =[
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "letter",
-				"type": "string"
-			}
-		],
-		"name": "guessLetter",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "memeToken",
 		"outputs": [
@@ -205,16 +218,16 @@ const gameContractABI =[
 		"type": "function"
 	},
 	{
-		"inputs": [
+		"inputs": [],
+		"name": "REWARD",
+		"outputs": [
 			{
-				"internalType": "address",
-				"name": "player",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
-		"name": "resetGame",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -234,19 +247,6 @@ const gameContractABI =[
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "word",
-				"type": "string"
-			}
-		],
-		"name": "startGame",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ];
@@ -480,6 +480,19 @@ const memeTokenABI = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "mintTokens",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "name",
 		"outputs": [
@@ -571,7 +584,7 @@ const memeTokenABI = [
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-]; // Add the ABI for your Meme Token Contract
+];
 
 let wordList = ["BLOCKCHAIN", "ETHEREUM", "SMARTCONTRACT", "DECENTRALIZED", "NFT", "TOKEN", "DAPP", "MINER", "GAS", "LEDGER", "DAO", "ICO", "WALLET", "BLOCKCHAIN", "BITCOIN", "NODE", "HASH", "IPFS", "CONSENSUS", "FORK", "HASHRATE"];
 let currentWord = '';
@@ -737,16 +750,20 @@ async function resetGame() {
     }
 }
 
+
 async function end_Game() {
     // Check if the game is over (either through winning or running out of chances)
-    if (currentDisplayedWord === currentWord || remainingChances === 0) {
+    if (currentDisplayedWord === currentWord) {
         try {
-            await gameContract.methods.endGame(account).send({ from: account });
+            // Call the mintTokens function from the MemeCoin contract, passing the reward amount of 20 TMT
+            const rewardAmount = 20 * 10**18;  // 20 TMT (in wei)
+            await memeTokenContract.methods.mintTokens(rewardAmount).send({ from: account });
             alert('Game has ended. Your reward is being processed.');
         } catch (error) {
             console.error('Error ending game on contract:', error);
         }
-    } else {
+    } else if (remainingChances === 0) {
         alert('Game cannot be ended until it is over.');
     }
 }
+
