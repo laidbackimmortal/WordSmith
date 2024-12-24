@@ -11,11 +11,11 @@ WordSmith is a decentralized blockchain-powered word-guessing game where players
 ## Contract Details
 - **Token Name**: TheMythicToken ($TMT$)
 - **Network**: Ethereum Testnet (Mantle Sepolia)
-- **Contract Address**: 0x270E8178eFeB318Da8cb6c93401112DAc4d3682f
-- **TMT Token Contract Address**: 0x4E65Af7072f0427953384563f8B05fc94F2283A4
+- **Contract Address**: 0x5a675C802Ec61bC25EA74FB82b453833CB86801d
+- **TMT Token Contract Address**: 0x87F59f6AABeAf3585B5ae4f8f16080cb8cCbcA3b
 
 ## Deployment
-- **Contract Address**: [View on Explore](https://sepolia.mantlescan.xyz/address/0x270E8178eFeB318Da8cb6c93401112DAc4d3682f)
+- **Contract Address**: [View on Explore](https://sepolia.mantlescan.xyz/address/0x5a675C802Ec61bC25EA74FB82b453833CB86801d)
 - **Coin Used**: $TMT$ (TheMythicToken)
 
 
